@@ -1,15 +1,25 @@
+<?php
+	require("php/menu.php");
+ ?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>AnnotGenome</title>
+	<link rel="stylesheet" type="text/css" href="css/general.css">
+    <title>Formulaire de recherche</title>
 </head>
 
 <body>
 
-<h1>Page d'accueil utilisateur</h1>
+<name> AnnotGenome </name>
 
+<div>
+	<?php display_menu(); ?>
+</div>
+<!--
 <p>Lancer nouvelle recherche</p><br>
+
 <form action="placeholder_search.html" method="post">
     <label for="species">Espèce</label>
     <input type="text" placeholder = "Escherichia coli" id="species"><br>
@@ -26,7 +36,7 @@
     <input type="submit" value="Recherche">
 </form>
 <br>
-
+-->
 </body>
 
 </html>
