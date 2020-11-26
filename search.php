@@ -12,31 +12,45 @@
 
 <body>
 
-<name> AnnotGenome </name>
+<div class="name"> AnnotGenome </div>
 
-<div>
+<div class="navBar">
 	<?php display_menu(); ?>
 </div>
-<!--
-<p>Lancer nouvelle recherche</p><br>
 
-<form action="placeholder_search.html" method="post">
-    <label for="species">Espèce</label>
-    <input type="text" placeholder = "Escherichia coli" id="species"><br>
 
-    <label for="pattern">Motif</label>
-    <input type="text" placeholder = "%ATCG%" id="pattern"><br>
 
-    <label for="pattern">Nom de protéine</label>
-    <input type="text"  placeholder = "Beta-galactosidase" id="protein"><br>
-
-    <label for="pattern">Nom de gènes</label>
-    <input type="text"  placeholder = "LacZ" id="gene"><br>
-
-    <input type="submit" value="Recherche">
+<form class="searchForm" action="results.php" method="post">
+	<div class="champ">
+    	<label class="input">idGenome :</label>
+		<input class="input" type="text" name = "idGenome"><br><br>
+	</div>
+	<div class="champ">
+		<label class="input">Biotype du gene :</label>
+		<input type="text" name = "geneBiotype"><br><br>
+	</div>
+	<div class="champ">
+		<label class="input">geneName : </label>
+		<input type="text" name = "geneName"><br><br>
+	</div>
+	<div class="champ">
+		<label class="input">Biotype du transcrit : </label>
+		<input type="text" name = "transcript_biotype"><br><br>
+	</div>
+	<div class="champ">
+		<label class="input">Symbole du gene : </label>
+		<input type="text" name = "geneSymbol"><br><br>
+	</div>
+	<div class="champ">
+		<label class="input">Position : </label>
+		<input type="text" name = "pos"><br><br>
+	</div>
+	<div class="champ">
+    	<input type="submit" value="Recherche">
+	</div>
 </form>
 <br>
--->
+
 </body>
 
 </html>
