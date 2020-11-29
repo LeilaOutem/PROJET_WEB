@@ -1,5 +1,5 @@
 <?php
-	require("php/menu.php");
+	require("menu.php");
  ?>
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@
 
 <body>
 
-<name> AnnotGenome </name>
+<div class = "name"> AnnotGenome </name>
 
 <div>
 	<?php display_menu(); ?>

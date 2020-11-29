@@ -1,8 +1,8 @@
 nav {
-	margin: 27px auto 0;
+	margin: 100px auto 0;
 
 	position: relative;
-	width: 590px;
+	 width: 670px; 
 	height: 50px;
 	background-color: #d9ffe1;
 	border-radius: 8px;
@@ -36,7 +36,7 @@ a:nth-child(2) {
 	width: 110px;
 }
 a:nth-child(3) {
-	width: 100px;
+	width: 160px;
 }
 a:nth-child(4) {
 	width: 160px;
@@ -55,18 +55,18 @@ nav .start-about, a:nth-child(2):hover~.animation {
 	background-color: #86EF9C;
 }
 nav .start-blog, a:nth-child(3):hover~.animation {
-	width: 100px;
-	left: 210px;
+	width: 160px;
+	left: 220px;
 	background-color: #59ED78;
 }
 nav .start-portefolio, a:nth-child(4):hover~.animation {
 	width: 160px;
-	left: 310px;
+	left: 385px;
 	background-color: #3BEC60;
 }
 nav .start-contact, a:nth-child(5):hover~.animation {
 	width: 120px;
-	left: 470px;
+	left: 550px;
 	background-color: #10C837;
 }
 
@@ -78,3 +78,8 @@ name {
 body {
 	background-color: #d9ffe1;
 }
+ 
+cnx {
+	height: 30px; /* Hauteur des champs */
+	width: 60px; /* Longueur des champs */
+	} 
