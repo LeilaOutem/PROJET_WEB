@@ -5,7 +5,11 @@ already_annoted_genomes = ("Escherichia_coli_cft073", "Escherichia_coli_o157_h7_
 insert_file = open("insert_values.sql", "w")
 
 # Auto incrément
+# Pas besoin de préciser quand on insert dans la table génome mais
+# on a quand même besoin de garder trace de ça pour les clés étrangères dans la table séquence
 genome_id = 1
+# Je ne sais pas si ça fonctionne exactement comme ça (début à 1, puis 2, puis 3, ...) mais c'est ce que j'ai vu sur des exemples 
+
 
 dict_seq_annot = dict()
 # Dictionnaire { id séquence : dictionnaire pour les annotations et infos de la séquence }
