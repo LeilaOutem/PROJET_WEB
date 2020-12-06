@@ -19,24 +19,66 @@
 </div>
 
 <?php
+	//connexion a la bdd : $dbconn = pg_connect("host=localhost dbname=publishing user=www password=foo")or die('Connexion impossible : ' . pg_last_error());
+
+	//$dbconn = pg_connect("host=ipadress port=5433 dbname=publishing user=user password=password")
+    	//or die('Connexion impossible : ' . pg_last_error());
+
+	$champs = array();
+	$valeurs = array();
+	$n = 0;
+
 	if (empty($_POST["idGenome"]) == FALSE) {
-		echo $_POST["idGenome"]."<br>";
+		$champs[] = "idGenome";
+		$valeurs[] = $_POST["idGenome"];
+		$n += 1;
 	}
 	if (empty($_POST["geneBiotype"]) == FALSE) {
-		echo $_POST["geneBiotype"]."<br>";
+		$champs[] = "geneBiotype";
+		$valeurs[] = $_POST["geneBiotype"];
+		$n += 1;
 	}
 	if (empty($_POST["geneName"]) == FALSE) {
-		echo $_POST["geneName"]."<br>";
+		$champs[] = "geneName";
+		$valeurs[] = $_POST["geneName"];
+		$n += 1;
 	}
 	if (empty($_POST["transcript_biotype"]) == FALSE) {
-		echo $_POST["transcript_biotype"]."<br>";
+		$champs[] = "transcript_biotype";
+		$valeurs[] = $_POST["transcript_biotype"];
+		$n += 1;
 	}
 	if (empty($_POST["geneSymbol"]) == FALSE) {
-		echo $_POST["geneSymbol"]."<br>";
+		$champs[] = "geneSymbol";
+		$valeurs[] = $_POST["geneSymbol"];
+		$n += 1;
 	}
 	if (empty($_POST["pos"]) == FALSE) {
-		echo $_POST["pos"]."<br>";
+		$champs[] = "pos";
+		$valeurs[] = $_POST["pos"];
+		$n += 1;
 	}
+
+	$select = implode(",", $champs);
+	$where = " WHERE ".$champs[0]." = ".$valeurs[0];
+	for ($i=1; $i < $n; $i++) {
+		$where .= " AND ".$champs[$i]." = ".$valeurs[$i];
+	}
+
+	$query = 'SELECT '.$select.' FROM '.$where.";";
+	echo $query;
+
+	//$result = pg_query($query) or die('Échec de la requête : ' . pg_last_error());
+
+	//while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+
+    //	foreach ($line as $col_value) {
+    //    }
+    //}
+
+	//pg_free_result($result);
+
+	//pg_close($dbconn);
 
 
 
