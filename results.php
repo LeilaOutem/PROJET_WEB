@@ -28,36 +28,64 @@
 	$valeurs = array();
 	$n = 0;
 
-	if (empty($_POST["idGenome"]) == FALSE) {
-		$champs[] = "idGenome";
-		$valeurs[] = $_POST["idGenome"];
+	if (empty($_POST["id"]) == FALSE) {
+		if ($_POST["type"] == "genome") {
+			$champs[] = "id_genome";
+			$valeurs[] = $_POST["id"];
+		}
+		else {
+			$champs[] = "id_sequence";
+			$valeurs[] = $_POST["id"];
+		}
 		$n += 1;
 	}
-	if (empty($_POST["geneBiotype"]) == FALSE) {
-		$champs[] = "geneBiotype";
-		$valeurs[] = $_POST["geneBiotype"];
+	if (empty($_POST["chromosome"]) == FALSE) {
+		$champs[] = "chromosome";
+		$valeurs[] = $_POST["chromosome"];
 		$n += 1;
 	}
-	if (empty($_POST["geneName"]) == FALSE) {
-		$champs[] = "geneName";
-		$valeurs[] = $_POST["geneName"];
+	if ($_POST["type"] == "genome"){
+		if (empty($_POST["species_name"]) == FALSE) {
+			$champs[] = "species_name";
+			$valeurs[] = $_POST["species_name"];
+			$n += 1;
+		}
+		if (empty($_POST["strains"]) == FALSE) {
+			$champs[] = "strains";
+			$valeurs[] = $_POST["strains"];
+			$n += 1;
+		}
+	}
+	else {
+		if (empty($_POST["sequence_prot"]) == FALSE) {
+			$champs[] = "prot_sequence";
+			$valeurs[] = $_POST["sequence_prot"];
+			$n += 1;
+		}
+		if (empty($_POST["start_pos"]) == FALSE) {
+			$champs[] = "start_pos";
+			$valeurs[] = $_POST["start_pos"];
+			$n += 1;
+		}
+		if (empty($_POST["end_pos"]) == FALSE) {
+			$champs[] = "end_pos";
+			$valeurs[] = $_POST["end_pos"];
+			$n += 1;
+		}
+	}
+	if (empty($_POST["sequence_nt"]) == FALSE) {
+		if ($_POST["type"] == "genome") {
+			$champs[] = "genome_sequence";
+			$valeurs[] = $_POST["sequence_nt"];
+		}
+		else {
+			$champs[] = "nt_sequence";
+			$valeurs[] = $_POST["sequence_nt"];
+		}
 		$n += 1;
 	}
-	if (empty($_POST["transcript_biotype"]) == FALSE) {
-		$champs[] = "transcript_biotype";
-		$valeurs[] = $_POST["transcript_biotype"];
-		$n += 1;
-	}
-	if (empty($_POST["geneSymbol"]) == FALSE) {
-		$champs[] = "geneSymbol";
-		$valeurs[] = $_POST["geneSymbol"];
-		$n += 1;
-	}
-	if (empty($_POST["pos"]) == FALSE) {
-		$champs[] = "pos";
-		$valeurs[] = $_POST["pos"];
-		$n += 1;
-	}
+
+
 
 	$select = implode(",", $champs);
 	$where = " WHERE ".$champs[0]." = ".$valeurs[0];
@@ -65,22 +93,35 @@
 		$where .= " AND ".$champs[$i]." = ".$valeurs[$i];
 	}
 
-	$query = 'SELECT '.$select.' FROM '.$where.";";
+	$query = 'SELECT '.$select.' FROM '.$_POST["type"].$where.";";
 	echo $query;
 
 	//$result = pg_query($query) or die('Échec de la requête : ' . pg_last_error());
 
+	echo "<table>";
+		echo "<thead>";
+			echo "<tr>";
+				echo "<th> Resultats </th>";
+			echo "</tr>";
+		echo "</thead>";
+	//echo "<tr>";
 	//while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-
+	//
     //	foreach ($line as $col_value) {
+	//
+	//		echo "<td><a href = \"genome.php?id=".$col_value[0]."\">$col_value[0]</a></td>";
+	//
     //    }
+	//
     //}
+	//echo "</tr>";
+	echo "</table>";
 
 	//pg_free_result($result);
 
 	//pg_close($dbconn);
-
-
+	$test = 304;
+	echo "<a href = \"genome.php?id=".$test."\">888</a>";
 
 
 ?>
