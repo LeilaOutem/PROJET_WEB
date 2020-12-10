@@ -15,7 +15,7 @@ from parse_functions import *
 def insert_annotated(genome_dir):
     try:
         #params = config()
-        conn = psycopg2.connect(host="localhost",database="annotgenome",user="freaky",password="") #,port = "1")
+        conn = psycopg2.connect(host="90.116.12.246",database="annotgenome",user="postgres",password="projetWEB2020" ,port = "5433")
         cur = conn.cursor()
         # Début de transaction
         # cur.execute(requete)
@@ -60,7 +60,7 @@ def insert_annotated(genome_dir):
 def insert_not_annoted(genome_dir):
     try:
         #params = config()
-        conn = psycopg2.connect(host="localhost",database="annotgenome",user="freaky",password="") #,port = "1")
+        conn = psycopg2.connect(host="90.116.12.246",database="annotgenome",user="postgres",password="projetWEB2020" ,port = "5433")
         cur = conn.cursor()
         # Début de transaction
         # cur.execute(requete)
@@ -92,7 +92,7 @@ def insert_not_annoted(genome_dir):
 
 
 if __name__ == "__main__":
-    directory = ""
+    directory = "data/"
     annotated = ("Escherichia_coli_cft073", "Escherichia_coli_o157_h7_str_edl933", "Escherichia_coli_str_k_12_substr_mg1655")
     not_annoted = "new_coli"
 
