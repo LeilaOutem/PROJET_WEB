@@ -1,0 +1,142 @@
+if (document.getElementById("start_pos").value != "") {
+	text = text + <?php echo json_encode($line["start_pos"]); ?>+";";
+}
+if (document.getElementById("end_pos").value != "") {
+	text = text + <?php echo json_encode($line["end_pos"]); ?>+";";
+}
+if (document.getElementById("length").value != "") {
+	text = text + <?php echo json_encode($line["length"]); ?>+";";
+}
+if (document.getElementById("status").value != "") {
+	text = text + <?php echo json_encode($line["status"]); ?>+";";
+}
+if (document.getElementById("gene").value != "") {
+	text = text + <?php echo json_encode($line_annot["gene"]); ?>+";";
+}
+if (document.getElementById("gene_biotype").value != "") {
+	text = text + <?php echo json_encode($line_annot["gene_biotype"]); ?>+";";
+}
+if (document.getElementById("transcript_biotype").value != "") {
+	text = text + <?php echo json_encode($line_annot["transcript_biotype"]); ?>+";";
+}
+if (document.getElementById("gene_symbol").value != "") {
+	text = text + <?php echo json_encode($line_annot["gene_symbol"]); ?>+";";
+}
+if (document.getElementById("description").value != "") {
+	text = text + <?php echo json_encode($line_annot["description"]); ?>+";";
+}
+if (document.getElementById("validator_comment").value != "") {
+	text = text + <?php echo json_encode($line_annot["validator_comment"]); ?>+";";
+}
+if (document.getElementById("nt_sequence").value != "") {
+
+	var element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+	element.setAttribute('download', filename);
+	element.style.display = 'none';
+	document.body.appendChild(element);
+
+	element.click();
+
+	document.body.removeChild(element);
+	//download(filename+"_cds.txt",text+"\\n"+<?php echo json_encode($line["nt_sequence"]); ?>+";");
+
+}
+if (document.getElementById("prot_sequence").value != "") {
+
+	var element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+	element.setAttribute('download', filename);
+	element.style.display = 'none';
+	document.body.appendChild(element);
+
+	element.click();
+
+	document.body.removeChild(element);
+	//download(filename+"_pep.txt",text+"\\n"+<?php echo json_encode($line["prot_sequence"]); ?>+";");
+
+}
+if (document.getElementById("nt_sequence").value == "" and document.getElementById("prot_sequence").value == "") {
+	alert("Please choose nucleotide sequence and/or proteique sequence to download a file");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="champ">
+	<label class="input" for="nt_sequence"> Séquence nucléotidique : </label>
+	<input type="checkbox" name="nt_sequence" id="nt_sequence" value="yes">
+</div>
+<br>
+<div class="champ">
+	<label class="input" for="prot_sequence"> Séquence protéique : </label>
+	<input type="checkbox" name="prot_sequence" id="prot_sequence" value="yes">
+</div>
+<br>
+<div class="champ">
+	<label class="input" for="chromosome"> Chromosome : </label>
+	<input type="checkbox" name="chromosome" id="chromosome" value="yes">
+</div>
+<br>
+<div class="champ">
+	<label class="input" for="start_pos"> Position de départ : </label>
+	<input type="checkbox" name="start_pos" id="start_pos" value="yes">
+</div>
+<br>
+<div class="champ">
+	<label class="input" for="end_pos"> Position de fin : </label>
+	<input type="checkbox" name="end_pos" id="end_pos" value="yes">
+</div>
+<br>
+<div class="champ">
+	<label class="input" for="length"> Taille : </label>
+	<input type="checkbox" name="length" id="length" value="yes">
+</div>
+<br>
+<div class="champ">
+	<label class="input" for="status"> Status : </label>
+	<input type="checkbox" name="status" id="status" value="yes">
+</div>
+<br>
+
+<?php if ($line["status"] != "not annotated" and $line["status"] != "waiting for annotation") {	?>
+	<div class="champ">
+		<label class="input" for="gene"> Nom du gène : </label>
+		<input type="checkbox" name="gene" id="gene" value="yes">
+	</div>
+	<br>
+	<div class="champ">
+		<label class="input" for="gene_biotype"> Biotype du gène : </label>
+		<input type="checkbox" name="gene_biotype" id="gene_biotype" value="yes">
+	</div>
+	<br>
+	<div class="champ">
+		<label class="input" for="transcript_biotype"> Biotype du transcrit : </label>
+		<input type="checkbox" name="transcript_biotype" id="transcript_biotype" value="yes">
+	</div>
+	<br>
+	<div class="champ">
+		<label class="input" for="gene_symbol"> Symbole du gène : </label>
+		<input type="checkbox" name="gene_symbol" id="gene_symbol" value="yes">
+	</div>
+	<br>
+	<div class="champ">
+		<label class="input" for="description"> Description : </label>
+		<input type="checkbox" name="description" id="description" value="yes">
+	</div>
+	<br>
+	<div class="champ">
+		<label class="input" for="validator_comment"> Comentaire du validateur : </label>
+		<input type="checkbox" name="validator_comment" id="validator_comment" value="yes">
+	</div>
+	<br>
+<?php } ?>
