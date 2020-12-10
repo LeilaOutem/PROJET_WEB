@@ -20,7 +20,7 @@
 
 <?php
 	//conexion a la bdd :
-	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=18A1A70oY/84bZG")or die('Connexion impossible : ' . pg_last_error());
+	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
 
 	//$dbconn = pg_connect("host=ipadress port=5433 dbname=publishing user=user password=password")
     	//or die('Connexion impossible : ' . pg_last_error());

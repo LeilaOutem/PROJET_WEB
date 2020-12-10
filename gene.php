@@ -21,7 +21,7 @@
 <?php
 	$list_infos_sequence = ["id de la séquence","Séquence nucléotidique", "Séquence protéique",
 					"Chromosome", "Position de départ", "Position de fin", "Longueur de la séquence", "Génome", "Statut"];
-	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=18A1A70oY/84bZG")or die('Connexion impossible : ' . pg_last_error());
+	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
 
 	$query = "SELECT * FROM sequence WHERE id_sequence = '". htmlspecialchars($_GET["id"]). "';";
 

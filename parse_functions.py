@@ -1,30 +1,42 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Dec 10 19:18:08 2020
+
+@author: freaky
+"""
+
 def parse_genome(genome_dir):
     # retourne une liste des attributs à INSERT dans la table SQL Génome pour un génome
-    directory = "/".join(genome_dir.split("/")[0:-1])
-    genome = genome_dir.split("/")[-1]
+    #directory = "/".join(genome_dir.split("/")[0:-1])
+    genome = genome_dir #.split("/")[-1]
 
-    insert_file = open("insert_values_" + genome + ".sql", "w")
+    #insert_file = open("insert_values_" + genome + ".sql", "w")
 
-    dict_seq = dict()
+    #dict_seq = dict()
 
-    species_name = "_".join(genome.split("_")[0:2])
-    strain = "_".join(genome.split("_")[2:])
+    species_name = "'" + "_".join(genome.split("_")[0:2]) + "'"
+    strain = "'" + "_".join(genome.split("_")[2:]) + "'"
+    if strain == "''" :
+            strain = "'inconnu'"
 
-    with open(directory + genome + ".fa", "r") as f:
+
+    with open(genome + ".fa", "r") as f:
         genome_file = f.readlines()
 
-    genome_sequence = ""
+    genome_sequence = "'"
 
     for line in genome_file:
         if ">" in line:
             info = line.split(":")
-            chromosome = info[2]
-            length = info[5]
-    
+            chromosome = "'" + info[2] + "'"
+            length = "'" + info[5] + "'"
+
         else:
             line = line.strip()
             genome_sequence = genome_sequence + line
-    
+    genome_sequence += "'"
+    #print("parsage genome"+genome_dir)
     return([genome_sequence, length, chromosome, species_name, strain])
 
 def parse_sequence(genome_dir):
@@ -35,24 +47,24 @@ def parse_sequence(genome_dir):
     # l'attribut STATUT à definir soit même dans la requete !
 
     # CREATE TABLE sequence(id_sequence : VARCHAR(32) PRIMARY KEY NOT NULL,
-    #                     nt_sequence : VARCHAR(1024), 
-    #                     prot_sequence : VARCHAR(1024), 
+    #                     nt_sequence : VARCHAR(1024),
+    #                     prot_sequence : VARCHAR(1024),
     #                     chromosome : VARCHAR(32),
-    #                     start_pos : INT, end_pos : INT, length : INT, 
+    #                     start_pos : INT, end_pos : INT, length : INT,
     #                     status : VARCHAR(64) CHECK(status IN
-    #                     (‘not annotated’, ‘waiting for annotation’,  ‘annotated, waiting 
-    #                     for validation’, ‘validated’)), 
-    #                     CONSTRAINT FKseq_id_genome FOREIGN KEY 
-    #                     (id_genome) REFERENCES genome(id_genome), 
-    #                     CONSTRAINT FKseq_id_user FOREIGN KEY id_user 
+    #                     (‘not annotated’, ‘waiting for annotation’,  ‘annotated, waiting
+    #                     for validation’, ‘validated’)),
+    #                     CONSTRAINT FKseq_id_genome FOREIGN KEY
+    #                     (id_genome) REFERENCES genome(id_genome),
+    #                     CONSTRAINT FKseq_id_user FOREIGN KEY id_user
     #                     REFERENCES user (id_user))
 
-    sequences = []
+    #sequences = []
 
-    directory = "/".join(genome_dir.split("/")[0:-1])
-    genome = genome_dir.split("/")[-1]
+    #directory = "/".join(genome_dir.split("/")[0:-1])
+    genome = genome_dir #.split("/")[-1]
 
-    with open(directory + genome + "_cds.fa") as f:
+    with open(genome + "_cds.fa") as f:
             cds_file = f.readlines()
 
     dict_seq = dict()
@@ -75,20 +87,20 @@ def parse_sequence(genome_dir):
                     info = info[:i+1]
 
             # Extraire les élements d'annotations pour les ajouter au dictionnaire
-            id_sequence = info[0].split(">")[1]
+            id_sequence = "'" + info[0].split(">")[1] + "'"
             dict_seq[id_sequence] = dict()
-            
+
             # clé étrangère pour le génome
 
             info_position = info[2].split(":")
-            dict_seq[id_sequence]["chromosome"] = info_position[1]
-            dict_seq[id_sequence]["start_pos"] = info_position[3]
-            dict_seq[id_sequence]["end_pos"] = info_position[4]
-            dict_seq[id_sequence]["length"] = str(int(info_position[4]) - int(info_position[3]))
-            dict_seq[id_sequence]["strand"] = info_position[5]
+            dict_seq[id_sequence]["chromosome"] = "'" + info_position[1] + "'"
+            dict_seq[id_sequence]["start_pos"] = "'" + info_position[3] + "'"
+            dict_seq[id_sequence]["end_pos"] = "'" + info_position[4] + "'"
+            dict_seq[id_sequence]["length"] = "'" + str(int(info_position[4]) - int(info_position[3])) + "'"
+            #dict_seq[id_sequence]["strand"] = "'" + info_position[5]+ "'"
 
             # On commence une nouvelle séquence
-            dict_seq[id_sequence]["nt_sequence"] = ""
+            dict_seq[id_sequence]["nt_sequence"] = "'"
 
         else:
             # On concatène les lignes ensemble pour former la séquence en une seule chaine de caractères
@@ -97,18 +109,19 @@ def parse_sequence(genome_dir):
             dict_seq[id_sequence]["nt_sequence"] += line
 
 
-    # On lit le fichier _pep.fa pour récuperer la séquence peptidique 
-    with open(directory + genome + "_pep.fa") as f:
+    # On lit le fichier _pep.fa pour récuperer la séquence peptidique
+    with open(genome + "_pep.fa") as f:
         pep_file = f.readlines()
 
     for line in pep_file:
         if ">" in line:
-            id_sequence = line.split(" ")[0].split(">")[1]
-            dict_seq[id_sequence]["prot_sequence"] = ""
+            id_sequence = "'" + line.split(" ")[0].split(">")[1] + "'"
+            dict_seq[id_sequence]["prot_sequence"] = "'"
 
         else:
             line = line.strip()
             dict_seq[id_sequence]["prot_sequence"] += line
+
 
 
     sequence_list = list()
@@ -122,6 +135,8 @@ def parse_sequence(genome_dir):
         sequence.append(dict_seq[id]["end_pos"])
         sequence.append(dict_seq[id]["length"])
         sequence_list.append(sequence)
+    #print("parsage sequence"+genome_dir)
+
     return sequence_list
 
 
@@ -130,20 +145,20 @@ def parse_annotation(genome_dir):
     # retourne une liste des attributs à INSERT dans la table SQL Annotation pour un génome
     # [id_sequence, gene, gene_biotype, transcript_biotype, gene_symbol, description, validator_comment]
 
-    # CREATE TABLE annotation(id_sequence : VARCHAR(32) PRIMARY KEY NOT NULL, 
-    #                         gene : VARCHAR(32), 
-    #                         gene_biotype : VARCHAR(128), 
-    #                         transcript_biotype : VARCHAR(128), 
-    #                         gene_symbol : VARCHAR(8), 
-    #                         description : VARCHAR(128), 
-    #                         validator_comment : VARCHAR(256), 
+    # CREATE TABLE annotation(id_sequence : VARCHAR(32) PRIMARY KEY NOT NULL,
+    #                         gene : VARCHAR(32),
+    #                         gene_biotype : VARCHAR(128),
+    #                         transcript_biotype : VARCHAR(128),
+    #                         gene_symbol : VARCHAR(8),
+    #                         description : VARCHAR(128),
+    #                         validator_comment : VARCHAR(256),
     #                         CONSTRAINT FKannot_id_sequence FOREIGN KEY (id_sequence) REFERENCES sequence(id_sequence))
-    directory = "/".join(genome_dir.split("/")[0:-1])
-    genome = genome_dir.split("/")[-1]
+    #directory = "/".join(genome_dir.split("/")[0:-1])
+    genome = genome_dir #.split("/")[-1]
 
     annotation_list = list()
 
-    with open(directory + genome + "_cds.fa") as f:
+    with open(genome + "_cds.fa") as f:
              cds_file = f.readlines()
 
     for line in cds_file:
@@ -165,11 +180,13 @@ def parse_annotation(genome_dir):
                     info = info[:i+1]
 
             # Extraire les élements d'annotations pour les ajouter au dictionnaire
-            id_sequence = info[0].split(">")[1]
-            
-            gene = info[3].split(":")[1]
-            gene_biotype = info[4].split(":")[1]
-            transcript_biotype = info[5].split(":")[1]
+            id_sequence = "'" + info[0].split(">")[1] + "'"
+
+            strand = "'" + info[2].split(":")[5] + "'"
+
+            gene = "'" + info[3].split(":")[1] + "'"
+            gene_biotype = "'" + info[4].split(":")[1] + "'"
+            transcript_biotype = "'" + info[5].split(":")[1] + "'"
 
             # "gene_symbol" n'est pas forcement présent
             # donc on considère les différents cas possibles
@@ -178,10 +195,14 @@ def parse_annotation(genome_dir):
                 description = info[7].split(":")[1]
 
             elif "description" in info[6]:
-                gene_symbol = ""
+                gene_symbol = "null"
                 description = info[6].split(":")[1]
-            
-            annotation_list.append([id_sequence, gene, gene_biotype, transcript_biotype, gene_symbol, description, ""])
 
+            gene_symbol = gene_symbol.replace("'", "`")
+            gene_symbol = "'" + gene_symbol + "'"
+
+            description = description.replace("'", "`")
+            description = "'" + description + "'"
+            annotation_list.append([id_sequence, strand, gene, gene_biotype, transcript_biotype, gene_symbol, description, "'No comment'"])
+    #print("parsage annotation"+genome_dir)
     return annotation_list
-

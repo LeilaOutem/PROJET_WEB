@@ -23,7 +23,7 @@
 
 <div style="text-align: center;">L'annotation a été enregistrée ! Vous allez être redirigé vers la page du gène.</div>
 <?php
-	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=18A1A70oY/84bZG")or die('Connexion impossible : ' . pg_last_error());
+	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
 	$id = "'".$_GET["id"]."',";
 	$gene = "'".$_POST["gene"]."',";
 	$bio_gene = "'".$_POST["biot_gene"]."',";

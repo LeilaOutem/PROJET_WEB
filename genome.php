@@ -22,7 +22,7 @@
 
 	$list_infos_genome = ["id du génome", "Longueur", "Chromosome", "Nom de l'espèce", "Souche"];
 	//connexion a la bdd :
-	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=18A1A70oY/84bZG")or die('Connexion impossible : ' . pg_last_error());
+	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
 
 	$query = "SELECT id_genome, length, chromosome, species_name, strain FROM genome WHERE id_genome = '". htmlspecialchars($_GET["id"]). "';";
 	$query_seq = "SELECT genome_sequence FROM genome WHERE id_genome = '". htmlspecialchars($_GET["id"]). "';";
