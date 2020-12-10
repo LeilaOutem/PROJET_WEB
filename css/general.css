@@ -108,6 +108,7 @@ nav .start-contact, a:nth-child(5):hover~.animation {
 	width: 40%;
 	margin-top: 5%;
 	border: 1px solid black;
+	word-break: break-all;
 }
 .th_infos {
 	text-align: center;
@@ -124,4 +125,37 @@ tr.tr_infos:hover {
 
 .td_infos {
 	width: 50%;
+	border-bottom: 1px solid black;
+}
+
+.gene {
+	position: relative;
+}
+
+.gene:hover{
+	background-color: #DCED0B;
+}
+
+.gene .tooltip{
+	visibility: hidden;
+	width: 300px;
+	height: 60px;
+	border-radius: 10px;
+	background-color: white;
+	border: 2px solid black;
+	top: 100%;
+	left: 50%;
+	position: absolute;
+	padding: 5px;
+	z-index: 1;
+	text-align: center;
+}
+
+.gene:hover .tooltip {
+	visibility: visible;
+}
+
+a.clickable_cds {
+	text-decoration: none;
+	color: #424949;
 }

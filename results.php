@@ -19,7 +19,8 @@
 </div>
 
 <?php
-	//connexion a la bdd : $dbconn = pg_connect("host=localhost dbname=publishing user=www password=foo")or die('Connexion impossible : ' . pg_last_error());
+	//conexion a la bdd :
+	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=18A1A70oY/84bZG")or die('Connexion impossible : ' . pg_last_error());
 
 	//$dbconn = pg_connect("host=ipadress port=5433 dbname=publishing user=user password=password")
     	//or die('Connexion impossible : ' . pg_last_error());
@@ -86,42 +87,48 @@
 	}
 
 
+	if ($_POST["type"] == "genome") {
+		$select = "id_genome";
+		$type = "genome";
+	}
+	else {
+		$select = "id_sequence";
+		$type = "gene";
+	}
 
-	$select = implode(",", $champs);
-	$where = " WHERE ".$champs[0]." = ".$valeurs[0];
+	$where = " WHERE ".$champs[0]." = '".$valeurs[0]."'";
 	for ($i=1; $i < $n; $i++) {
-		$where .= " AND ".$champs[$i]." = ".$valeurs[$i];
+		$where .= " AND ".$champs[$i]." = '".$valeurs[$i]."'";
 	}
 
 	$query = 'SELECT '.$select.' FROM '.$_POST["type"].$where.";";
-	echo $query;
+	//echo $query;
 
-	//$result = pg_query($query) or die('Échec de la requête : ' . pg_last_error());
+	$result = pg_query($query) or die('Échec de la requête : ' . pg_last_error());
 
-	echo "<table>";
+	echo "<table class=\"table_infos\">";
 		echo "<thead>";
 			echo "<tr>";
-				echo "<th> Resultats </th>";
+				echo "<th class=\"th_infos\"> Resultats </th>";
 			echo "</tr>";
 		echo "</thead>";
-	//echo "<tr>";
-	//while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-	//
-    //	foreach ($line as $col_value) {
-	//
-	//		echo "<td><a href = \"genome.php?id=".$col_value[0]."\">$col_value[0]</a></td>";
-	//
-    //    }
-	//
-    //}
-	//echo "</tr>";
+
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		echo "<tr class=\"tr_infos\">";
+
+    	foreach ($line as $col_value) {
+
+			echo "<td><a href = \"".$type.".php?id=".$col_value."\">$col_value</a></td>";
+
+        }
+		echo "</tr>";
+    }
+
 	echo "</table>";
 
-	//pg_free_result($result);
+	pg_free_result($result);
 
-	//pg_close($dbconn);
-	$test = 304;
-	echo "<a href = \"genome.php?id=".$test."\">888</a>";
+	pg_close($dbconn);
 
 
 ?>

@@ -7,7 +7,7 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="css/general.css">
-    <title>Formulaire de recherche</title>
+    <title>CDS </title>
 </head>
 
 <body>
@@ -21,29 +21,34 @@
 <?php
 	$list_infos_sequence = ["id de la séquence","Séquence nucléotidique", "Séquence protéique",
 					"Chromosome", "Position de départ", "Position de fin", "Longueur de la séquence", "Génome", "Statut"];
-	//connexion a la bdd : $dbconn = pg_connect("host=localhost dbname=publishing user=www password=foo")or die('Connexion impossible : ' . pg_last_error());
+	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=18A1A70oY/84bZG")or die('Connexion impossible : ' . pg_last_error());
 
-	//$dbconn = pg_connect("host=ipadress port=5433 dbname=publishing user=user password=password")
-    	//or die('Connexion impossible : ' . pg_last_error());
-	$query = "SELECT * FROM sequence WHERE id_sequence = ". htmlspecialchars($_GET["id"]). ";";
+	$query = "SELECT * FROM sequence WHERE id_sequence = '". htmlspecialchars($_GET["id"]). "';";
 
-	//$result = pg_query($query) or die('Échec de la requête : ' . pg_last_error());
-	//$line = pg_fetch_array($result, null, PGSQL_ASSOC);
-	//if ($line[7] != "not annotated" or $line[7] != "waiting for annotation") {
-		$query_annot = "SELECT * FROM annotation WHERE id_sequence = ". htmlspecialchars($_GET["id"]). ";";
-		$list_infos_annotation = ["id de la séquence", "Nom du gène", "Biotype", "Biotype du transcrit", "Symbole du gène",
+	$result = pg_query($query) or die('Échec de la requête : ' . pg_last_error());
+	$line = pg_fetch_array($result, null, PGSQL_ASSOC);
+
+	if ($line["status"] != "not annotated" and $line["status"] != "waiting for annotation") {
+
+		$query_annot = "SELECT gene, gene_biotype, transcript_biotype, gene_symbol, description, validator_comment FROM annotation WHERE id_sequence = '". htmlspecialchars($_GET["id"]). "';";
+		$list_infos_annotation = ["Nom du gène", "Biotype", "Biotype du transcrit", "Symbole du gène",
 								"Description", "Commentaire du validateur"];
-		//$result_annot = pg_query($query_annot) or die('Échec de la requête : ' . pg_last_error());
-		//$line_annot = pg_fetch_array($result_annot, null, PGSQL_ASSOC);
-		//if ($line[7] == "validated") {
-		//	echo "validated";
-		//}
-		//else {
-		//	echo "not validated";
-		//}
-	//}
+		$result_annot = pg_query($query_annot) or die('Échec de la requête : ' . pg_last_error());
+		$line_annot = pg_fetch_array($result_annot, null, PGSQL_ASSOC);
+		if ($line["status"] == "validated") {
+			echo "validated";
+		}
+		else {
+			echo "not validated";
+		}
+	}
+	else {
+		echo "<a href=\"insert_annotation.php?id=".htmlspecialchars($_GET["id"])."\"> Annoter le genome </a>";
+	}
 
 ?>
+
+
 
 		<table class="table_infos">
 			<tr>
@@ -52,17 +57,16 @@
 
 
 			<?php
-				for ($i = 1; $i < 9; $i++) {
-					echo "<tr class=\"tr_infos\"><td class=\"td_infos\">".$list_infos_sequence[$i]."</td><td class=\"td_infos\"> test </td></tr>";
+				//for ($i = 1; $i < 9; $i++) {
+				//	echo "<tr class=\"tr_infos\"><td class=\"td_infos\">".$list_infos_sequence[$i]."</td><td class=\"td_infos\"> test </td></tr>";
+				//};
+				$i = 0;
 
+				foreach ($line as $col_value){
+
+					echo "<tr class=\"tr_infos\"><td class=\"td_infos\">".$list_infos_sequence[$i]."</td><td class=\"td_infos\"> $col_value </td></tr>";
+					$i ++;
 				};
-
-
-				//for ($i = 1; $i < 6; $i++){
-				//
-				//	echo "<tr class=\"tr_infos\"> $line[i] </tr>";
-				//
-				// };
 
 			?>
 		</table><br><br>
@@ -84,7 +88,7 @@
 		</table> <br><br>
 
 		<?php
-			//if ($line[7] != "not annotated" or $line[7] != "waiting for annotation") {
+			if ($line["status"] != "not annotated" and $line["status"] != "waiting for annotation") {
 				?>
 				<table class="table_infos">
 					<tr>
@@ -92,25 +96,25 @@
 					</tr>
 					<?php
 
-					for ($i = 1; $i < 6; $i++) {
+					//for ($i = 1; $i < 6; $i++) {
 
-						echo "<tr class=\"tr_infos\"><td class=\"td_infos\">".$list_infos_annotation[$i]."</td><td class=\"td_infos\"> test </td></tr>";
+					//	echo "<tr class=\"tr_infos\"><td class=\"td_infos\">".$list_infos_annotation[$i]."</td><td class=\"td_infos\"> test </td></tr>";
 
-					};
+					//};
+					$i = 0;
+					foreach ($line_annot as $col_value){
 
-					//for ($i = 1; $i < 6; $i++){
-					//
-					//	echo "<tr class=\"tr_infos\"> $line_annot[i] </tr>";
-					//
-					// };
-			//}
+						echo "<tr class=\"tr_infos\"><td class=\"td_infos\">".$list_infos_annotation[$i]."</td><td class=\"td_infos\"> $col_value </td></tr>";
+						$i ++;
+					 };
+			};
 		 ?>
-	 			</table>
+	 </table><br><br>
 
 		<?php
-		//pg_free_result($result);
+		pg_free_result($result);
 
-		//pg_close($dbconn);
+		pg_close($dbconn);
 		?>
 
 
