@@ -1,5 +1,6 @@
 <?php
 	require("php/menu.php");
+	include_once 'libphp/db_utils.php';
  ?>
 
 <!DOCTYPE html>
@@ -20,7 +21,7 @@
 
 <?php
 	//conexion a la bdd :
-	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
+	connect_db ();
 
 	$champs = array();
 	$valeurs = array();
@@ -35,7 +36,7 @@
 		else {
 			#$champs[] = "id_sequence";
 			#$valeurs[] = $_POST["id"];
-			$champs[] = "id_sequence = '" . $_POST["id"] . "'";
+			$champs[] = "id_sequence LIKE '%" . $_POST["id"] . "%'";
 		}
 		$n += 1;
 	}
@@ -49,13 +50,13 @@
 		if (empty($_POST["species_name"]) == FALSE) {
 			#$champs[] = "species_name";
 			#$valeurs[] = $_POST["species_name"];
-			$champs[] = "species_name = '" . $_POST["species_name"] . "'";
+			$champs[] = "species_name LIKE '%" . $_POST["species_name"] . "%'";
 			$n += 1;
 		}
 		if (empty($_POST["strains"]) == FALSE) {
 			#$champs[] = "strains";
 			#$valeurs[] = $_POST["strains"];
-			$champs[] = "strains = '" . $_POST["strains"] . "'";
+			$champs[] = "strains LIKE '%" . $_POST["strains"] . "%'";
 			$n += 1;
 		}
 	}
@@ -109,33 +110,46 @@
 		$where .= " AND ".$champs[$i];
 	}
 
-	$query = 'SELECT '.$select.' FROM '.$_POST["type"].$where.";";
+
+
+	if ($where != " WHERE ") {
+		$query = 'SELECT '.$select.' FROM '.$_POST["type"].$where.";";
+	}
+	else {
+		$query = 'SELECT '.$select.' FROM '.$_POST["type"].";";
+	}
 
 	$result = pg_query($query) or die('Request fail : ' . pg_last_error());
+	if (pg_num_rows($result)==0) {
+		echo "<div>No result Found</div>";
+	}
+	else {
+		echo "<table class=\"table_infos\">";
+			echo "<thead>";
+				echo "<tr>";
+					echo "<th class=\"th_infos\"> Results </th>";
+				echo "</tr>";
+			echo "</thead>";
 
-	echo "<table class=\"table_infos\">";
-		echo "<thead>";
-			echo "<tr>";
-				echo "<th class=\"th_infos\"> Results </th>";
-			echo "</tr>";
-		echo "</thead>";
+		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+				echo "<tr class=\"tr_infos\">";
 
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		echo "<tr class=\"tr_infos\">";
+		    	foreach ($line as $col_value) {
 
-    	foreach ($line as $col_value) {
+					echo "<td><a href = \"".$type.".php?id=".$col_value."\">$col_value</a></td>";
 
-			echo "<td><a href = \"".$type.".php?id=".$col_value."\">$col_value</a></td>";
+		        }
+				echo "</tr>";
 
-        }
-		echo "</tr>";
-    }
+	    }
 
-	echo "</table>";
+		echo "</table>";
+	}
+
 
 	pg_free_result($result);
 
-	pg_close($dbconn);
+	disconnect_db ();
 
 
 ?>

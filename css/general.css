@@ -103,6 +103,149 @@ nav .start-contact, a:nth-child(5):hover~.animation {
 	padding-right: 5px;
 }
 
+footer{
+    background:rgba(17, 17, 17, 0.863);
+    position:absolute;
+    bottom:0;
+    width:99%;
+    height:50px;
+    padding-bottom: 20px;
+}
+
+.text_footer {
+    padding-left: 10px;
+    padding-right: 10px;
+    color: rgb(216, 206, 192);
+    width: 100%;
+}
+
+.link {
+    margin-right: 65px;
+    text-align: right;
+}
+
+
+.t {
+  border-collapse: collapse;
+  border: 2px solid rgb(200,200,200);
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+}
+
+.t {
+  border: 1px solid rgb(190,190,190);
+  padding: 10px 20px;
+}
+
+/*th.t {
+  background-color: rgb(235,235,235);
+}*/
+
+td.t {
+  text-align: center;
+}
+
+tr.t:nth-child(even) td.t {
+  background-color: rgb(250,250,250);
+}*/
+
+
+caption {
+  padding: 10px;
+}
+
+/* input[type="submit"] { */
+.loginout {
+font-size: .9em;
+color: #fff;
+background: #76b852;
+outline: none;
+border: 1px solid #76b852;
+cursor: pointer;
+padding: 0.9em;
+-webkit-appearance: none;
+width: 100%;
+margin: -1.4em 0;
+letter-spacing: 4px;
+}
+
+.confrej{
+font-size: .9em;
+color: #fff;
+background: #76b852;
+outline: none;
+border: 1px solid #76b852;
+cursor: pointer;
+padding: 0.9em;
+-webkit-appearance: none;
+width: 46%;
+margin: -2.4em 0;
+letter-spacing: 4px;
+text-align: center;
+}
+.annot{
+font-size: .9em;
+color: #fff;
+background: #76b852;
+outline: none;
+border: 1px solid #76b852;
+cursor: pointer;
+padding: 0.9em;
+-webkit-appearance: none;
+width: 48%;
+margin: 0.6em 0;
+letter-spacing: 3px;
+text-align: center;
+}
+.modifrole{
+font-size: .9em;
+color: #fff;
+background: #76b852;
+outline: none;
+border: 1px solid #76b852;
+cursor: pointer;
+padding: 0.9em;
+-webkit-appearance: none;
+width: 24%;
+margin: -2.4em 0;
+letter-spacing: 4px;
+text-align: center;
+}
+
+.assign{
+font-size: .9em;
+color: #fff;
+background: #76b852;
+outline: none;
+border: 1px solid #76b852;
+cursor: pointer;
+padding: 13;
+-webkit-appearance: none;
+width: 24%;
+margin: -2.4em 0;
+letter-spacing: 4px;
+text-align: center;
+position : relative;
+top : -12px;
+left : -18px;
+
+}
+
+.search{
+font-size: .9em;
+color: #fff;
+background: #76b852;
+outline: none;
+border: 1px solid #76b852;
+cursor: pointer;
+padding: 0.9em;
+-webkit-appearance: none;
+width: 80%;
+margin: -2.4em 0;
+letter-spacing: 4px;
+text-align: center;
+}
+
 .table_infos {
 	margin-left: 30%;
 	width: 40%;

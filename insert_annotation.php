@@ -1,5 +1,6 @@
 <?php
 	require("php/menu.php");
+	
  ?>
 
 <!DOCTYPE html>

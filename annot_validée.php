@@ -1,5 +1,6 @@
 <?php
 	require("php/menu.php");
+	include_once 'libphp/db_utils.php';
  ?>
 
 <!DOCTYPE html>
@@ -21,7 +22,7 @@
 
 
 <?php
-	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
+	connect_db ();
 	$id = "'".$_GET["id"]."',";
 	$strand = "'".$_POST["strand"]."'";
 	$gene = "'".$_POST["gene"]."',";
@@ -41,7 +42,7 @@
 	}
 	header("refresh:5;url=gene.php?id=".htmlspecialchars($_GET["id"]));
 
-	pg_close($dbconn);
+	disconnect_db ();
 
 	?>
 

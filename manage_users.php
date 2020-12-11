@@ -5,13 +5,13 @@ include_once 'libphp/db_utils.php';
 connect_db ();
 
 
-ini_set('display_errors',1); 
+ini_set('display_errors',1);
 error_reporting(E_ALL);
 
 // Verifying if user is connected, if not redirecting him to login page
 if(!isset($_SESSION["email"])){
   header("Location: index.php");
-  exit(); 
+  exit();
 }
 
 else {?>
@@ -26,59 +26,58 @@ else {?>
   <link rel="stylesheet" href="css/general.css" />
   <head>
 		<title>Manage users </title>
-      
-    </head>  
+
+    </head>
   </head>
   <body>
-  
-    <div class="sucess">
+
+    <div> <!-- class="sucess">-->
     <center><h1>Welcome <?php echo $_SESSION['email']; ?>!</h1></center> </div>
     <div style = "position:absolute; right:5px; top:21px; textcolor: #10C837;">
     <input type="submit" class = "loginout" value="LOGOUT" onclick="window.location.href='logout.php';"  />
-    
+
       </div>
-  </body>
-</html>
+
 <?php
     if($_SESSION["id_role"] != 1)
     {
         echo '<center><br><b>You are not allowed';
 
     }
-    else 
+    else
     {
         if(isset($_POST["confirm"])){
             $email_to_evaluate = $_POST["email"];
-            $querystatus= "UPDATE users SET inscription_status = TRUE WHERE email = '$email_to_evaluate'";
+            $querystatus= "UPDATE users SET inscription_status = TRUE WHERE email = '".$email_to_evaluate."';";
             $result = pg_query($db_conn,$querystatus) or die('query failed with exception: ' . pg_last_error());
             echo " You have validated $email_to_evaluate inscription ! ";
         }
         if(isset($_POST["reject"]))
-        {     
+        {
             $email_to_evaluate = $_POST['email'];
-            $querystatus= "DELETE FROM users WHERE email = '$email_to_evaluate'";
+            $querystatus= "DELETE FROM users WHERE email = '".$email_to_evaluate."';";
             $result = pg_query($db_conn,$querystatus) or die('query failed with exception: ' . pg_last_error());
-        echo " You have deleted $email_to_evaluate from database ! ";
+        echo " You have deleted ".$email_to_evaluate." from database ! ";
         }
 
         if(isset($_POST["modify"]))
-        {     
+        {
             $email_to_evaluate = $_POST['email'];
             $new_role = intval($_POST['modify_role']);
 
-            $queryrole= "UPDATE users SET id_role = $new_role WHERE email = '$email_to_evaluate'";
-            $result = pg_query($db_conn['db'],$queryrole) or die('query failed with exception: ' . pg_last_error());
-        echo " You have changed $email_to_evaluate's role ! ";
+            $queryrole= "UPDATE users SET id_role = '".$new_role."' WHERE email = '".$email_to_evaluate."';";
+            $result = pg_query($db_conn,$queryrole) or die('query failed with exception: ' . pg_last_error());
+        echo " You have changed ".$email_to_evaluate."'s role ! ";
         }
 
-            
+
         //We get the IDs, emails and insription status of users
         $email_session = $_SESSION['email'];
-        $query = "SELECT email, first_name, surname, phone_number, id_role, date_last_connexion, inscription_status 
-        FROM users WHERE email <> '$email_session' ORDER BY inscription_status";
+        $query = "SELECT email, first_name, surname, phone_number, id_role, date_last_connexion, inscription_status
+        FROM users WHERE email <> '".$email_session."' ORDER BY inscription_status;";
         $res = pg_query($db_conn,$query) or die('query failed with exception: ' . pg_last_error());
 
-        echo"<center><table class='bicolor'>\n";
+        echo"<center><table>\n";
         echo"<thead>
         <th>Email</th>
         <th>First name</th>
@@ -91,8 +90,8 @@ else {?>
         </thead>";
         echo "<tbody>\n";
 
-        $sec_tab = TRUE; 
-        while($row = pg_fetch_array($res,null, PG_ASSOC)){
+        $sec_tab = TRUE;
+        while($row = pg_fetch_array($res,null, PGSQL_ASSOC)){
             $email = $row['email'];
             $firstname = $row['first_name'];
             $surname = $row['surname'];
@@ -100,7 +99,7 @@ else {?>
             $date=$row['date_last_connexion'];
             $role=$row['id_role'];
             $inscription_status = $row['inscription_status'];
-            
+
             //retrieve the role in letter (not just the id)
 
             if($row['id_role']==1)
@@ -120,12 +119,12 @@ else {?>
                 $role = 'Annotator';
             }
 
-            if($row['inscription_status']==0)//not already registered
+            if($row['inscription_status']== "f")//not already registered
             {
                  //fisrt line of tab : columns names
-              
+
                 $status = "<form action='' method='post'>
-                        <textarea style='visibility:hidden' id='email' name='email'>$email</textarea> 
+                        <textarea style='visibility:hidden' id='email' name='email'>$email</textarea>
                         <center><input  type='submit' class = 'confrej' name='confirm' value='Confirm'>
                         <input  type='submit' class = 'confrej' name='reject' value='Reject'>
                         </form>";
@@ -140,21 +139,21 @@ else {?>
                 <td>$status</td>
                 </tr>";
 
-                
+
 
             }
 
             else{//the user is already registered
                 //another table for the registered users
                  //fisrt line of tab : columns names
-                
-                
+
+
                  if($sec_tab == TRUE){
                     echo "</tbody>";
                     echo "</table>";
                     echo "<br>";
 
-                    echo"<center><table class='bicolor'>\n";
+                    echo"<center><table>\n";
                     echo"<thead>
                     <th>Email</th>
                     <th>First name</th>
@@ -169,16 +168,16 @@ else {?>
                     echo "<tbody>\n";
                      $sec_tab=FALSE;
                  }
-              
+
                  $modify = "<form action='' method='post'>
-                         <textarea style='visibility:hidden' id='email' name='email'>$email</textarea> 
+                         <textarea style='visibility:hidden' id='email' name='email'>$email</textarea>
                          <select name ='modify_role' type='submit' text-align : left>
                          <option value = '2'>lector</option>
                          <option value = '4'>annotator</option>
                          <option value = '3'>validator</option>
-                         <center><input  class = 'modifrole' type='submit'  name='modify' value='Modify'>                  
+                         <center><input  class = 'modifrole' type='submit'  name='modify' value='Modify'>
                          </form>";
- 
+
                  echo "<tr>
                  <td>$email</td>
                  <td>$firstname</td>
@@ -189,23 +188,19 @@ else {?>
                  <td>$inscription_status</td>
                  <td>$modify</td>
                  </tr>";
- 
+
             }
 
-            
+
             }
-            
+
             echo "</tbody>";
             echo "</table>";
 
- ?>  
+ ?>
 
-  <link rel="stylesheet" href="css/general.css" />
-    <head>
-        <div class="content">
-        <title>List of users</title>
-    </head>
-    <body>
+	</body>
+</html>
 
     <?php
     }
@@ -213,5 +208,3 @@ else {?>
 //closing session
 disconnect_db ();
 ?>
-
-

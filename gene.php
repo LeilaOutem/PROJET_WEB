@@ -1,5 +1,6 @@
 <?php
 	require("php/menu.php");
+	include_once 'libphp/db_utils.php';
  ?>
 
 <!DOCTYPE html>
@@ -21,7 +22,7 @@
 <?php
 	$list_infos_sequence = ["Sequence ID","Nucleotides sequence", "Protein sequence",
 					"Chromosome", "Start position", "End position", "Sequence length", "Genome", "Status"];
-	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
+	connect_db ();
 
 	$query = "SELECT * FROM sequence WHERE id_sequence = '". htmlspecialchars($_GET["id"]). "';";
 
@@ -111,7 +112,7 @@
 			pg_free_result($result_annot);
 		}
 
-		pg_close($dbconn);
+		disconnect_db ();
 		?>
 
 		<table class="table_infos">

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
  <?php
 
-include_once './libphp/db_utils.php';
+include_once 'libphp/db_utils.php';
 connect_db ();
-
-ini_set('display_errors',1); 
+ini_set('display_errors',1);
 error_reporting(E_ALL);
 
 
@@ -16,25 +15,26 @@ if(isset($_POST['login']))
       $passwd =$_POST['password'];
       if($email !== "" && $passwd !== "")
       {
-		  $query = "SELECT * FROM `users` WHERE email='$email' and password='".hash('sha256', $passwd)."'";
+		  $query = "SELECT * FROM users WHERE email='".$email."' and password='".hash('sha256', $passwd)."';";
 		  $result = pg_query($db_conn,$query) or die('query failed with exception: ' . pg_last_error());
 		  $rows = pg_num_rows($result);
 		  if($rows==1){
 			//changing date
-			$querydate = "UPDATE users SET date_last_connexion = CURDATE() WHERE email = '$email'";
+			pg_free_result($result);
+			$querydate = "UPDATE users SET date_last_connexion = NOW() WHERE email = '".$email."';";
 			$newdate = pg_query($db_conn,$querydate) or die('query failed with exception: ' . pg_last_error());
 
 			  $_SESSION['email'] = $email;
 			  header("Location: home.php");
-			
+
 		  }else{
 			$message = "Incorrect username or password";
 			echo $message;
-			}	
+			}
 
     	}
-		
-	}	
+
+	}
  }
 
 if(isset($_POST['signup']))
@@ -62,22 +62,30 @@ if(isset($_POST['signup']))
 				if (filter_var($email, FILTER_VALIDATE_EMAIL))
 				{
 					//verify if no such email already exists
-					$queryemail="SELECT surname FROM users WHERE email='".$email."'";
-					$check_email = pg_query($db_conn, $queryemail);
-					
+					$queryemail="SELECT id_user FROM users WHERE email='".$email."';";
+					$check = pg_query($db_conn, $queryemail);
+					$check_email = pg_fetch_array($check, null, PGSQL_ASSOC);
+					//echo $check_email['id_user'];
+
 					if(!is_null($check_email) and $check_email !== TRUE)
 					{
-						$querymin = "SELECT id_role FROM role WHERE descriptor LIKE '".$role."'";
-						$res = pg_query($db_conn,$querymin)or die('query failed with exception: ' . pg_last_error());
-						while($row = pg_fetch_array($result, null, PG_ASSOC)){
-						$query = "INSERT INTO users(email, password, first_name, surname, phone_number, date_last_connexion, id_role) 
-						VALUES ('".$email."','".hash('sha256', $passwd)."','".$firstname."','".$surname."','".$phone_number."', NOW(), '".$row['role']."')";
-						pg_query($db_conn,$query)or die('query failed with exception: ' . pg_last_error());}
+						pg_free_result($check);
+						$querymin = "SELECT id_role FROM role WHERE descriptor LIKE '".$role."';";
+						$res = pg_query($db_conn,$querymin) or die('query failed with exception: ' . pg_last_error());
+
+						while($row = pg_fetch_array($res, null, PGSQL_ASSOC)){
+
+							$query = "INSERT INTO users(email, password, first_name, surname, phone_number, date_last_connexion, id_role)
+										VALUES ('".$email."','".hash('sha256', $passwd)."','".$firstname."','".$surname."','".$phone_number."', NOW(), '".$row['id_role']."');";
+							pg_query($db_conn,$query)or die('query failed with exception: ' . pg_last_error());
+
+						}
+						pg_free_result($res);
 	?>
 
 <div class="message"><center>You have successfully been signed up. You can log in.<br />
 <a href="index.php"></a></div>
- <?php		
+ <?php
 					}
 					else
 					{
@@ -109,9 +117,12 @@ if(isset($_POST['signup']))
 		}
 	}
 }
+
+
+//
 //closing session
 disconnect_db ();
-?> 
+?>
 
 
 
@@ -120,28 +131,28 @@ disconnect_db ();
         <link type="text/css" rel="stylesheet" href="css/general.css"> <!--link css-->
     <head>
 		<title>Welcome to AnnotGenome site</title>
-      
-    </head>  
+
+    </head>
 <body>
-        <div id="cnx" href = css/form.css>  
+        <div id="cnx" href = css/form.css>
         <div class="name"> AnnotGenome </div>
 			<form action="index.php" method="post">
-                <table align = "right" class="menutop" width=30% cellspacing="0" border="0">
-                    <tr>
-                        <td><label><b>Email</b></label>
+                <table align = "right" class="t" width=30% cellspacing="0" border="0"> <!--class="menutop"-->
+                    <tr class="t">
+                        <td class = "t"><label><b>Email</b></label>
                         <input type="text" placeholder="Please enter your email" name="email" required></td>
-                        <td><label><b>Password</b></label>
+                        <td class="t"><label><b>Password</b></label>
                         <input type="password" placeholder="Please enter your password" name="password" required></td>
 						<div class="clear"> </div>
 						</div>
-                        <td><input type="submit" class = "loginout" name="login" value="LOGIN" style = "margin: 20px 0px 0px 0px;"></td>
+                        <td class="t"><input type="submit" class = "loginout" name="login" value="LOGIN" style = "margin: 20px 0px 0px 0px;"></td>
                     </tr>
                 </table>
 			</form>
         </div>
-    
 
-  
+
+
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -168,15 +179,15 @@ disconnect_db ();
                     <label for="surname">surname :</label>
                     <input type="text" id="surname" name="surname" required>
                     <label for="tel">phone number:</label>
-                    <input type="text" placeholder="phone number" name="phone_number" > 
+                    <input type="text" placeholder="phone number" name="phone_number" >
                     <label for="password">password :</label>
 					<input class="text" type="password" name="password" placeholder="Password" required="">
                     <label for="confirm">confirm password :</label>
 					<input class="text w3lpass" type="password" name="confpassword" placeholder="Confirm Password" required="">
                     <label for="role">role :</label>
-                    <input type="radio" id="role" name="role" value="Lector">Lector        
-                    <input type="radio" id="role" name="role" value="Annotator">Annotator
-                    <input type="radio" id="role" name="role" value="Validator">Validator
+                    <input type="radio" id="role" name="role" value="user">user
+                    <input type="radio" id="role" name="role" value="annotator">annotator
+                    <input type="radio" id="role" name="role" value="validator">validator
 					<div class="wthree-text">
 						<label class="anim">
 							<input type="checkbox" class="checkbox" required="">

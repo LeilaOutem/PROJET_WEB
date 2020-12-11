@@ -1,5 +1,6 @@
 <?php
 	require("php/menu.php");
+	include_once 'libphp/db_utils.php';
  ?>
 
 <!DOCTYPE html>
@@ -22,7 +23,7 @@
 
 	$list_infos_genome = ["Genome ID", "Length", "Chromosome", "Species Name", "Strain"];
 	//connexion a la bdd :
-	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
+	connect_db ();
 
 	$query = "SELECT id_genome, length, chromosome, species_name, strain FROM genome WHERE id_genome = '". htmlspecialchars($_GET["id"]). "';";
 	$query_seq = "SELECT genome_sequence FROM genome WHERE id_genome = '". htmlspecialchars($_GET["id"]). "';";
@@ -58,14 +59,16 @@
 
 				for ($c = 0; $c < strlen($seq); $c++) {
 					if ($c == $line_cds["start_pos"]-1) {
-						echo "<div class=\"gene\"><a class=\"clickable_cds\" href = \"gene.php?id=".$line_cds["id_sequence"]."\">";
-						echo $seq[$c];
+						echo "<span class=\"gene\"><a class=\"clickable_cds\" href = \"gene.php?id=".$line_cds["id_sequence"]."\">*";
+						echo "<span class=\"tooltip\">Sequence ID : ".$line_cds["id_sequence"]."<br>Start position : ".$line_cds["start_pos"]."<br>End position : ".$line_cds["end_pos"]."</span></a></span>";
+						$line_cds = pg_fetch_array($result_cds, null, PGSQL_ASSOC);
+						$seq[$c];
 					}
-					elseif ($c == $line_cds["end_pos"]-1) {
+					/*elseif ($c == $line_cds["end_pos"]-1) {
 						echo $seq[$c];
 						echo "<span class=\"tooltip\">Sequence ID : ".$line_cds["id_sequence"]."<br>Start position : ".$line_cds["start_pos"]."<br>End position : ".$line_cds["end_pos"]."</span></a></div>";
 						$line_cds = pg_fetch_array($result_cds, null, PGSQL_ASSOC);
-					}
+					}*/
 					else {
 						echo $seq[$c];
 					}
@@ -159,7 +162,7 @@
 		pg_free_result($result);
 		pg_free_result($result_cds);
 		pg_free_result($result_seq);
-		pg_close($dbconn);
+		disconnect_db ();
 		?>
 
 
