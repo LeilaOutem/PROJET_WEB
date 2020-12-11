@@ -7,7 +7,7 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="css/general.css">
-    <title>Formulaire de recherche</title>
+    <title>Search Form</title>
 </head>
 
 <body>
@@ -30,7 +30,7 @@
 		<input type="text" name = "chromosome"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Nom de l'espece : </label>
+		<label class="input">species Name : </label>
 		<input type="text" name = "species_name"><br><br>
 	</div>
 	<div class="champ">
@@ -38,30 +38,30 @@
 		<input type="text" name = "strain"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Sequence nucleotides: </label>
+		<label class="input">Nucleotides sequence : </label>
 		<input type="text" name = "sequence_nt"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Sequence protéique : </label>
+		<label class="input">Protein sequence : </label>
 		<input type="text" name = "sequence_prot"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Position de début : </label>
+		<label class="input">Start position : </label>
 		<input type="text" name = "start_pos"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Position de fin : </label>
+		<label class="input">End position : </label>
 		<input type="text" name = "end_pos"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Genome ou Gene : </label>
+		<label class="input">Genome or Gene : </label>
 		genome :
 		<input type="radio" name="type" value="genome">
 		gene :
 		<input type="radio" name="type" value="sequence">
 	</div><br>
 	<div class="champ">
-    	<input type="submit" value="Recherche">
+    	<input type="submit" value="Search">
 	</div>
 </form>
 <br>

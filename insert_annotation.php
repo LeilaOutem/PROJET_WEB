@@ -7,9 +7,13 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="css/general.css">
-    <title>Ajouter une annotation</title>
+    <title>Add an annotation</title>
 	<script type="text/javascript">
 		function sendAnnot(){
+			if (document.getElementById("strand").value == "") {
+				alert("Please enter a strand");
+				return false;
+			}
 			if (document.getElementById("gene").value == "") {
 				alert("Please enter a gene");
 				return false;
@@ -47,19 +51,23 @@
 
 <form name="annots" class="searchForm" action=<?php echo "\"annot_validée.php?id=".htmlspecialchars($_GET["id"])."\""; ?> onsubmit="return sendAnnot()" method="post">
 	<div class="champ">
-    	<label class="input">Gène :</label>
+    	<label class="input">Strand :</label>
+		<input class="input" type="text" id = "strand" name="strand"><br><br>
+	</div>
+	<div class="champ">
+    	<label class="input">Gene Name :</label>
 		<input class="input" type="text" id = "gene" name="gene"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Biotype du gène :</label>
+		<label class="input">Gene Biotype :</label>
 		<input type="text" id = "biot_gene" name="biot_gene"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Biotype du trasncrit : </label>
+		<label class="input">Transcript Biotype : </label>
 		<input type="text" id = "biot_trans" name="biot_trans"><br><br>
 	</div>
 	<div class="champ">
-		<label class="input">Symbole du gène : </label>
+		<label class="input">Gene Symbol : </label>
 		<input type="text" id = "symb" name="symb"><br><br>
 	</div>
 	<div class="champ">

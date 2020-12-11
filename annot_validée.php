@@ -7,7 +7,7 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="css/general.css">
-    <title>Ajouter une annotation</title>
+    <title>Add an Annotation</title>
 </head>
 
 <body>
@@ -20,29 +20,26 @@
 <br><br>
 
 
-
-<div style="text-align: center;">L'annotation a été enregistrée ! Vous allez être redirigé vers la page du gène.</div>
 <?php
 	$dbconn = pg_connect("host=localhost dbname=annotgenome user=freaky password=")or die('Connexion impossible : ' . pg_last_error());
 	$id = "'".$_GET["id"]."',";
+	$strand = "'".$_POST["strand"]."'";
 	$gene = "'".$_POST["gene"]."',";
 	$bio_gene = "'".$_POST["biot_gene"]."',";
 	$biot_trans = "'".$_POST["biot_trans"]."',";
 	$symb = "'".$_POST["symb"]."',";
 	$descr = "'".$_POST["descr"]."',";
-	$string = $id.$gene.$bio_gene.$biot_trans.$symb.$descr."'Pas encore de commentaire'" ;
+	$string = $id.$strand.$gene.$bio_gene.$biot_trans.$symb.$descr."'No comment'" ;
 
 
 	$insert = "INSERT INTO annotation VALUES (".$string.");";
 	if (pg_query($dbconn, $insert) and pg_query($dbconn, "UPDATE sequence SET status = 'annotated, waiting for validation' WHERE id_sequence = '".$_GET["id"]."';")) {
-		echo "<div style=\"text-align: center;\">Les données ont bien été insérées dans la base de données</div>";
+		echo "<div style=\"text-align: center;\">The annotation was added successfuly ! You will be redirected to the gene page.</div>";
 	}
 	else {
-		echo "<div style=\"text-align: center;\">Les données n'ont pas pu être insérées dans la base de données</div>";
+		echo "<div style=\"text-align: center;\">The annotation couldn't be added successfuly. You will be redirected to the gene page.</div>";
 	}
 	header("refresh:5;url=gene.php?id=".htmlspecialchars($_GET["id"]));
-
-	//pg_free_result($insert);
 
 	pg_close($dbconn);
 
